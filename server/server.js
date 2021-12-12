@@ -25,7 +25,9 @@ const server = http.createServer((req, res) => {
     console.log(`File path: ${filePath}`);
     console.log(`Content-Type: ${contentType}`)
 
-    res.writeHead(200, {'Content-Type': contentType});
+    res.writeHead(200, {
+        'Content-Type': contentType
+    });
 
     const readStream = fs.createReadStream(filePath);
     readStream.pipe(res);
@@ -39,8 +41,10 @@ server.listen(port, (err) => {
     }
 });
 
+// ==============================================================================================
 // responsible for loading the list of all cities and processing guesses from the player
 // ich würde es in eine seperate datei packen wenn ich wüsste wie
+// ==============================================================================================
 const LineByLineReader = require("line-by-line");
 const lr = new LineByLineReader("citydata/cities15000.txt");
 
@@ -103,3 +107,5 @@ class City {
         return false;
     }
 }
+
+exports.guess = guess;

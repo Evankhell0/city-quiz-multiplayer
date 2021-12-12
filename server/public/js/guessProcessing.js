@@ -1,8 +1,10 @@
+let server = require("../server.js").guess;
+
 let guessedCities = [];
 
 function processGuess(playerInput) {
     // access server.js guess method somehow
-    let guessResult = guess(playerInput);
+    let guessResult = server.guess(playerInput);
     if (guessResult == false) {
         // incorrect guess
         console.log("incorrect guess")
