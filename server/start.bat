@@ -1,3 +1,3 @@
 title City Quiz Multi
-node js/server.js
+node js/citylogic.js
 pause
