@@ -1,3 +1,3 @@
 # Multiplayer City Quiz
 
-besser als das original
+Multiplayer version of https://cityquiz.io/quizzes/world

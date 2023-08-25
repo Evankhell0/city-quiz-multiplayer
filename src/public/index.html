@@ -1,0 +1,31 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>How Many World Cities can you name?</title>
+    <link rel="stylesheet" href="./css/index.css">
+</head>
+
+<body>
+    <h1>How Many World Cities Can You Name?</h1>
+    <div class="center">
+        <form id="form" action="">
+            <input id="Eingabe" autocomplete="off">
+            <select id="countrySelection"></select>
+            <button>Send</button>
+        </form>
+    </div>
+
+    <ul id="userlist"></ul>
+
+    <ul id="log"></ul>
+
+    <ul id="results"></ul>
+
+    <script src="./js/countrySelection.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="./js/guessProcessing.js"></script>
+    <script src="./js/socket.js"></script>
+</body>
+
+</html>
