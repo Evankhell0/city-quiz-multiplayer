@@ -9,8 +9,9 @@ class GuessStorage {
     guess(cityName, user) {
         let matchingCities = this.allCities.filter(city => this.isMatching(cityName, city));
         matchingCities = matchingCities.sort((a, b) => b.population - a.population);
-        const largestMatchingCity = matchingCities[0];
         if(matchingCities.length) {
+            const largestMatchingCity = matchingCities[0];
+            largestMatchingCity.name = this.toTitleCase(largestMatchingCity.name);
             if(this.guessedCities.some(city => this.isMatching(largestMatchingCity.name, city))) {
                 return {
                     "msg": "duplicate",
@@ -34,16 +35,20 @@ class GuessStorage {
     }
 
     isMatching(cityName, city) {
+        const c = city;
         cityName = cityName.toLowerCase();
-        city.name = city.name.toLowerCase();
-        city.ascii_name = city.ascii_name ? city.ascii_name.toLowerCase() : city.name;
-        if(city.alternate_names) {
-            city.alternate_names = city.alternate_names.map(c => c.toLowerCase())
+        c.name = c.name.toLowerCase();
+        c.ascii_name = c.ascii_name ? c.ascii_name.toLowerCase() : c.name;
+        if(c.alternate_names) {
+            c.alternate_names = c.alternate_names.map(c => c.toLowerCase())
         } else {
-            city.alternate_names = [];
+            c.alternate_names = [];
         }
-        //city.alternate_names = city.alternate_names && city.alternate_names.length ? city.alternate_names.map(c => c.toLowerCase()) : city.name;
-        return cityName == city.name || cityName == city.ascii_name || city.alternate_names.includes(cityName)
+        return cityName == c.name || cityName == c.ascii_name || c.alternate_names.includes(cityName)
+    }
+
+    toTitleCase(str) {
+        return str.split(" ").map(x => x.slice(0,1).toUpperCase() + x.slice(1).toLowerCase()).join(" ");
     }
 }
 
