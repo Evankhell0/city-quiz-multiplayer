@@ -35,16 +35,10 @@ class GuessStorage {
     }
 
     isMatching(cityName, city) {
-        const c = city;
         cityName = cityName.toLowerCase();
-        c.name = c.name.toLowerCase();
-        c.ascii_name = c.ascii_name ? c.ascii_name.toLowerCase() : c.name;
-        if(c.alternate_names) {
-            c.alternate_names = c.alternate_names.map(c => c.toLowerCase())
-        } else {
-            c.alternate_names = [];
-        }
-        return cityName == c.name || cityName == c.ascii_name || c.alternate_names.includes(cityName)
+        return cityName == city.name?.toLowerCase()
+                || cityName == city.ascii_name?.toLowerCase()
+                || city.alternate_names?.map(c => c.toLowerCase())?.includes(cityName);
     }
 
     toTitleCase(str) {
