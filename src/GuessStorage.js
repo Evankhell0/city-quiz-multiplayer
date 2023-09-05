@@ -1,11 +1,10 @@
-//console.log(allCities.filter(x => x.name == "Berlin" && x.country_code == "DE"))
 class GuessStorage {
     constructor(cities) {
         this.allCities = cities;
         this.guessedCities = [];
     }
 
-    // process guesses coming from players, return city object if correct, return false if not
+    // process guesses coming from players, returns object{msg, city, guesser}
     guess(cityName, user) {
         let matchingCities = this.allCities.filter(city => this.isMatching(cityName, city));
         matchingCities = matchingCities.sort((a, b) => b.population - a.population);
