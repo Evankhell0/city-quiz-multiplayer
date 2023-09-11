@@ -12,23 +12,19 @@ class GuessStorage {
             const largestMatchingCity = matchingCities[0];
             largestMatchingCity.name = this.toTitleCase(largestMatchingCity.name);
             if(this.guessedCities.some(city => this.isMatching(largestMatchingCity.name, city))) {
-                return {
-                    "msg": "duplicate",
-                    "city": largestMatchingCity,
-                    "guesser": user
-                };
+                return this.createGuessObj("duplicate", largestMatchingCity, user);
             }
             largestMatchingCity.id = this.guessedCities.length + 1;
             this.guessedCities.push(largestMatchingCity);
-            return {
-                "msg": "correct",
-                "city" : largestMatchingCity,
-                "guesser": user
-            };
+            return this.createGuessObj("correct", largestMatchingCity, user);
         }
+        return this.createGuessObj("incorrect", null, user);
+    }
+
+    createGuessObj(result, city, user) {
         return {
-            "msg": "incorrect",
-            "city": null,
+            "msg": result,
+            "city": city,
             "guesser": user
         };
     }
