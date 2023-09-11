@@ -3,7 +3,7 @@ var socket = io();
 var form = document.getElementById("form");
 var input = document.getElementById("Eingabe");
 var select = document.getElementById("countrySelection");
-var results = document.getElementById('results');
+var cities = document.getElementById('cities');
 var log = document.getElementById('log');
 var userlist = document.getElementById('userlist');
 

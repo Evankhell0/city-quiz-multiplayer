@@ -17,11 +17,34 @@
         </form>
     </div>
 
-    <ul id="userlist"></ul>
+    <div class="flex">
+        <div id="statsDiv" class="list">
+            <span>Stats</span>
+            <ul id="stats">
+                <li>Guessed Cities: 132 / 15000</li>
+                <li>Capitals Guessed: 27 / 193</li>
+                <li>Total Guesses: 198</li>
+            </ul>
+        </div>
 
-    <ul id="log"></ul>
+        <div id="citiesDiv" class="list">
+            <span>Guessed Cities</span>
+            <ul id="cities"></ul>
+        </div>
 
-    <ul id="results"></ul>
+        <div class="list">
+            <div id="userDiv">
+                <span>Active Users</span>
+                <ul id="userlist"></ul>
+            </div>
+
+            <div id="logDiv">
+                <span>Guess Log</span>
+                <ul id="log"></ul>
+            </div>
+        </div>
+    </div>
+
 
     <script src="./js/countrySelection.js"></script>
     <script src="/socket.io/socket.io.js"></script>

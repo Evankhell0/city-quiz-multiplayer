@@ -19,14 +19,14 @@ function processResult(result) {
 }
 
 function resetCityList(newCities) {
-    results.innerHTML = "";
+    cities.innerHTML = "";
     newCities.forEach(c => createCityElement(c));
 }
 
 function createCityElement(city) {
     const item = document.createElement('li');
     item.textContent = `${city.id}. ${city.name} (${city.population.toLocaleString("en-US")})`;
-    results.appendChild(item);
+    cities.appendChild(item);
 }
 
 function createLogElement(message) {

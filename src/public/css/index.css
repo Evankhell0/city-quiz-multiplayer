@@ -9,6 +9,17 @@ div.center {
     width: 100%;
 }
 
+div.flex {
+    display: flex;
+    justify-content: center;
+    margin: 15px;
+}
+
+div.list {
+    margin: 0px 20px;
+    width: 25%;
+}
+
 #Eingabe {
     outline: 2px solid white;
     border: 2px solid #000000;
