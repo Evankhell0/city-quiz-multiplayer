@@ -4,24 +4,50 @@
 <head>
     <meta charset="utf-8" />
     <title>How Many World Cities can you name?</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="./css/index.css">
 </head>
 
 <body>
-    <h1>How Many World Cities Can You Name?</h1>
-    <div class="center">
-        <form id="form" action="">
-            <input id="Eingabe" autocomplete="off">
-            <select id="countrySelection"></select>
-            <button>Send</button>
-        </form>
+    <div class="m-3">
+        <h1 class="text-center">How Many World Cities Can You Name?</h1>
+        <div class="text-center m-3">
+            <form id="form" action="">
+                <input id="Eingabe" class="border border-dark border-2 rounded p-1" autocomplete="off">
+                <select id="countrySelection" class="border border-dark border-2 rounded"></select>
+                <button class="border border-dark border-2 rounded">Send</button>
+            </form>
+        </div>
     </div>
 
-    <ul id="userlist"></ul>
+    <div class="d-flex justify-content-center m-2">
+        <div id="statsDiv" class="col-3 border rounded m-2 py-2 px-3">
+            <span class="lead">Stats</span>
+            <ul id="stats" class="list-unstyled">
+                <li>Guessed Cities: 132 / 15000</li>
+                <li>Capitals Guessed: 27 / 193</li>
+                <li>Total Guesses: 198</li>
+            </ul>
+        </div>
 
-    <ul id="log"></ul>
+        <div id="citiesDiv" class="col-3 border rounded m-2 py-2 px-3">
+            <span class="lead">Guessed Cities</span>
+            <ul id="cities" class="list-unstyled"></ul>
+        </div>
 
-    <ul id="results"></ul>
+        <div class="col-3 m-2">
+            <div id="userDiv" class="border rounded py-2 px-3 mb-3">
+                <span class="lead">Active Users</span>
+                <ul id="userlist"></ul>
+            </div>
+
+            <div id="logDiv" class="border rounded py-2 px-3">
+                <span class="lead">Guess Log</span>
+                <ul id="log" class="list-unstyled"></ul>
+            </div>
+        </div>
+    </div>
+
 
     <script src="./js/countrySelection.js"></script>
     <script src="/socket.io/socket.io.js"></script>

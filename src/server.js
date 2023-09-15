@@ -51,7 +51,7 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
     console.log('a user connected');
 
-    socket.username = randomUserNames.pop();
+    socket.username = randomUserNames.pop() ?? "Unnamed";
     userlist.push(socket.username);
 
     io.emit("guessedCities", guessStorage.guessedCities);
