@@ -25,7 +25,7 @@ function resetCityList(newCities) {
 
 function createCityElement(city) {
     const item = document.createElement('li');
-    item.textContent = `${city.id}. ${city.name} (${city.population.toLocaleString("en-US")})`;
+    item.textContent = `${city.id}. ${city.name}, ${city.cou_name_en} (${city.population.toLocaleString("en-US")})`;
     cities.appendChild(item);
 }
 
