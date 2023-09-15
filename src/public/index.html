@@ -10,7 +10,7 @@
 
 <body>
     <div class="m-3">
-        <h1 class="text-center display-5">How Many World Cities Can You Name?</h1>
+        <h1 class="text-center">How Many World Cities Can You Name?</h1>
         <div class="text-center m-3">
             <form id="form" action="">
                 <input id="Eingabe" class="border border-dark border-2 rounded p-1" autocomplete="off">
@@ -21,29 +21,29 @@
     </div>
 
     <div class="d-flex justify-content-center m-2">
-        <div id="statsDiv" class="col-3 border rounded m-2 p-1">
-            <span>Stats</span>
-            <ul id="stats">
+        <div id="statsDiv" class="col-3 border rounded m-2 py-2 px-3">
+            <span class="lead">Stats</span>
+            <ul id="stats" class="list-unstyled">
                 <li>Guessed Cities: 132 / 15000</li>
                 <li>Capitals Guessed: 27 / 193</li>
                 <li>Total Guesses: 198</li>
             </ul>
         </div>
 
-        <div id="citiesDiv" class="col-3 border rounded m-2 p-1">
-            <span>Guessed Cities</span>
-            <ul id="cities"></ul>
+        <div id="citiesDiv" class="col-3 border rounded m-2 py-2 px-3">
+            <span class="lead">Guessed Cities</span>
+            <ul id="cities" class="list-unstyled"></ul>
         </div>
 
         <div class="col-3 m-2">
-            <div id="userDiv" class="border rounded p-1 mb-3">
-                <span>Active Users</span>
+            <div id="userDiv" class="border rounded py-2 px-3 mb-3">
+                <span class="lead">Active Users</span>
                 <ul id="userlist"></ul>
             </div>
 
-            <div id="logDiv" class="border rounded p-1">
-                <span>Guess Log</span>
-                <ul id="log"></ul>
+            <div id="logDiv" class="border rounded py-2 px-3">
+                <span class="lead">Guess Log</span>
+                <ul id="log" class="list-unstyled"></ul>
             </div>
         </div>
     </div>
