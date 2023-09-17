@@ -1,13 +1,13 @@
-var socket = io();
+const socket = io();
 
-var form = document.getElementById("form");
-var input = document.getElementById("Eingabe");
-var select = document.getElementById("countrySelection");
-var cities = document.getElementById('cities');
-var log = document.getElementById('log');
-var userlist = document.getElementById('userlist');
+const form = document.getElementById("form");
+const input = document.getElementById("Eingabe");
+const select = document.getElementById("countrySelection");
+const cities = document.getElementById('cities');
+const log = document.getElementById('log');
+const userlist = document.getElementById('userlist');
 
-form.addEventListener("submit", function(e) {
+form.addEventListener("submit", (e) => {
     e.preventDefault();
     if (input.value) {
         socket.emit("guess", input.value);
@@ -15,16 +15,15 @@ form.addEventListener("submit", function(e) {
     }
 });
 
-socket.on("guessResult", function(result) {
+socket.on("guessResult", (result) => {
     processResult(result);
 });
 
-socket.on("guessedCities", function(array) {
-    guessedCities = array;
-    resetCityList(guessedCities);
+socket.on("guessedCities", (cities) => {
+    reloadCityList(cities);
 });
 
-socket.on("userlist", function(users) {
+socket.on("userlist", (users) => {
     userlist.innerHTML = "";
     users.forEach(u => {
         const item = document.createElement('li');

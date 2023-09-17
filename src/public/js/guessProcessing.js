@@ -1,5 +1,3 @@
-let guessedCities = [];
-
 function processResult(result) {
     switch(result.msg) {
         case "incorrect":
@@ -9,7 +7,6 @@ function processResult(result) {
             createLogElement(`[${result.guesser.username}] Already Guessed (${result.city.name})`);
             break;
         case "correct":
-            guessedCities.push(result.city);
             createLogElement(`[${result.guesser.username}] Correct Guess! (${result.city.name})`);
             createCityElement(result.city);
             break;
@@ -18,7 +15,7 @@ function processResult(result) {
     }
 }
 
-function resetCityList(newCities) {
+function reloadCityList(newCities) {
     cities.innerHTML = "";
     newCities.forEach(c => createCityElement(c));
 }

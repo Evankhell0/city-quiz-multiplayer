@@ -250,7 +250,7 @@ const countries = {
     "AX": "Åland Islands"
 };
 
-let selectElement = document.getElementById("countrySelection");
+const selectElement = document.getElementById("countrySelection");
 
 for (const [key, value] of Object.entries(countries)) {
     let opt = document.createElement('option');
