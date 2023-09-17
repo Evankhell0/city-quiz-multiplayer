@@ -1,7 +1,10 @@
+const Stats = require("./Stats.js").Stats;
+
 class GuessStorage {
     constructor(cities) {
         this.allCities = cities;
         this.guessedCities = [];
+        this.stats = new Stats(cities);
     }
 
     // process guesses coming from players, returns object{msg, city, guesser}
@@ -15,7 +18,7 @@ class GuessStorage {
                 return this.createGuessObj("duplicate", largestMatchingCity, user);
             }
             largestMatchingCity.id = this.guessedCities.length + 1;
-            this.guessedCities.push(largestMatchingCity);
+            this.addCity(largestMatchingCity);
             return this.createGuessObj("correct", largestMatchingCity, user);
         }
         return this.createGuessObj("incorrect", null, user);
@@ -27,6 +30,11 @@ class GuessStorage {
             "city": city,
             "guesser": user
         };
+    }
+
+    addCity(city) {
+        this.guessedCities.push(city);
+        this.stats.update(this.guessedCities);
     }
 
     isMatching(cityName, city) {
