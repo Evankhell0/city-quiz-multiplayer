@@ -56,6 +56,7 @@ io.on('connection', (socket) => {
 
     io.emit("guessedCities", guessStorage.guessedCities);
     io.emit("userlist", userlist);
+    io.emit("stats", guessStorage.stats.format());
 
     socket.on('disconnect', () => {
         console.log('user disconnected');
@@ -69,6 +70,7 @@ io.on('connection', (socket) => {
             console.log(guessResult.city);
         }
         io.emit("guessResult", guessResult);
+        io.emit("stats", guessStorage.stats.format());
     });
 });
 

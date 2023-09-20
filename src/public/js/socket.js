@@ -4,6 +4,7 @@ const form = document.getElementById("form");
 const input = document.getElementById("Eingabe");
 const select = document.getElementById("countrySelection");
 const cities = document.getElementById('cities');
+const stats = document.getElementById('stats');
 const log = document.getElementById('log');
 const userlist = document.getElementById('userlist');
 
@@ -21,6 +22,10 @@ socket.on("guessResult", (result) => {
 
 socket.on("guessedCities", (cities) => {
     reloadCityList(cities);
+});
+
+socket.on("stats", (stats) => {
+    reloadStats(stats);
 });
 
 socket.on("userlist", (users) => {
