@@ -28,6 +28,9 @@ function reloadStats(newStats) {
 function createCityElement(city) {
     const item = document.createElement('li');
     item.textContent = `${city.id}. ${city.name}, ${city.cou_name_en} (${city.population?.toLocaleString("en-US")})`;
+    if(city.capital == true) {
+        item.textContent += " ★";
+    }
     cities.appendChild(item);
 }
 
