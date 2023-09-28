@@ -9,42 +9,42 @@ class GuessStorage {
 
     // process guesses coming from players, returns object{msg, city, guesser}
     guess(cityName, user) {
-        let matchingCities = this.allCities.filter(city => this.isMatching(cityName, city));
+        let matchingCities = this.allCities.filter(city => this.#isMatching(cityName, city));
         matchingCities = matchingCities.sort((a, b) => b.population - a.population);
         if(matchingCities.length) {
             const largestMatchingCity = matchingCities[0];
-            largestMatchingCity.name = this.toTitleCase(largestMatchingCity.name);
-            if(this.guessedCities.some(city => this.isMatching(largestMatchingCity.name, city))) {
-                return this.createGuessObj("duplicate", largestMatchingCity, user);
+            largestMatchingCity.name = this.#toTitleCase(largestMatchingCity.name);
+            if(this.guessedCities.some(city => this.#isMatching(largestMatchingCity.name, city))) {
+                return this.#createGuessObj("duplicate", largestMatchingCity, user);
             }
             largestMatchingCity.id = this.guessedCities.length + 1;
-            this.addCity(largestMatchingCity);
-            return this.createGuessObj("correct", largestMatchingCity, user);
+            this.#addCity(largestMatchingCity);
+            return this.#createGuessObj("correct", largestMatchingCity, user);
         }
-        return this.createGuessObj("incorrect", null, user);
+        return this.#createGuessObj("incorrect", null, user);
     }
 
-    createGuessObj(result, city, user) {
+    #createGuessObj(result, city, user) {
         return {
-            "msg": result,
-            "city": city,
-            "guesser": user
+            msg: result,
+            city: city,
+            guesser: user
         };
     }
 
-    addCity(city) {
+    #addCity(city) {
         this.guessedCities.push(city);
         this.stats.update(this.guessedCities);
     }
 
-    isMatching(cityName, city) {
+    #isMatching(cityName, city) {
         cityName = cityName.toLowerCase();
         return cityName == city.name?.toLowerCase()
                 || cityName == city.ascii_name?.toLowerCase()
                 || city.alternate_names?.map(c => c.toLowerCase())?.includes(cityName);
     }
 
-    toTitleCase(str) {
+    #toTitleCase(str) {
         return str.split(" ").map(x => x.slice(0,1).toUpperCase() + x.slice(1).toLowerCase()).join(" ");
     }
 }
