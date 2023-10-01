@@ -11,17 +11,21 @@ class GuessStorage {
     guess(cityName, user) {
         let matchingCities = this.allCities.filter(city => this.#isMatching(cityName, city));
         matchingCities = matchingCities.sort((a, b) => b.population - a.population);
-        if(matchingCities.length) {
-            const largestMatchingCity = matchingCities[0];
-            largestMatchingCity.name = this.#toTitleCase(largestMatchingCity.name);
-            if(this.guessedCities.some(city => this.#isMatching(largestMatchingCity.name, city))) {
-                return this.#createGuessObj("duplicate", largestMatchingCity, user);
-            }
-            largestMatchingCity.id = this.guessedCities.length + 1;
-            this.#addCity(largestMatchingCity);
-            return this.#createGuessObj("correct", largestMatchingCity, user);
+
+        if(!matchingCities.length) {
+            return this.#createGuessObj("incorrect", null, user);
         }
-        return this.#createGuessObj("incorrect", null, user);
+
+        const largestMatchingCity = matchingCities[0];
+        largestMatchingCity.name = this.#toTitleCase(largestMatchingCity.name);
+
+        if(this.guessedCities.some(city => this.#isMatching(largestMatchingCity.name, city))) {
+            return this.#createGuessObj("duplicate", largestMatchingCity, user);
+        }
+
+        largestMatchingCity.id = this.guessedCities.length + 1;
+        this.#addCity(largestMatchingCity);
+        return this.#createGuessObj("correct", largestMatchingCity, user);
     }
 
     #createGuessObj(result, city, user) {
