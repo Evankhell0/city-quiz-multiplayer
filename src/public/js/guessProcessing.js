@@ -1,13 +1,13 @@
 function processResult(result) {
     switch(result.msg) {
         case "incorrect":
-            createLogElement(`[${result.guesser.username}] Wrong Guess :(`);
+            createLogElement(`[${result.guesser.username}] Wrong Guess :(`,'text-danger');
             break;
         case "duplicate":
-            createLogElement(`[${result.guesser.username}] Already Guessed (${result.city.name})`);
+            createLogElement(`[${result.guesser.username}] Already Guessed (${result.city.name})`,'text-warning');
             break;
         case "correct":
-            createLogElement(`[${result.guesser.username}] Correct Guess! (${result.city.name})`);
+            createLogElement(`[${result.guesser.username}] Correct Guess! (${result.city.name})`,'text-success');
             createCityElement(result.city);
             break;
         default:
@@ -43,8 +43,11 @@ function createStatElement(stat) {
     stats.appendChild(item);
 }
 
-function createLogElement(message) {
+function createLogElement(message, ...cssClasses) {
     const item = document.createElement('li');
     item.textContent = message;
+    if (cssClasses && cssClasses.length > 0) {
+        item.classList.add(...cssClasses);
+    }
     log.appendChild(item);
 }
