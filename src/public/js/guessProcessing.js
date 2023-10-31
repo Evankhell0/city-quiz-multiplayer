@@ -1,13 +1,13 @@
 function processResult(result) {
     switch(result.msg) {
         case "incorrect":
-            createLogElement(`[${result.guesser.username}] Wrong Guess :(`,'text-danger');
+            createLogElement(`[${result.guesser.username}] Wrong Guess :(`, 'text-danger');
             break;
         case "duplicate":
-            createLogElement(`[${result.guesser.username}] Already Guessed (${result.city.name})`,'text-warning');
+            createLogElement(`[${result.guesser.username}] Already Guessed (${result.city.name})`, 'text-warning');
             break;
         case "correct":
-            createLogElement(`[${result.guesser.username}] Correct Guess! (${result.city.name})`,'text-success');
+            createLogElement(`[${result.guesser.username}] Correct Guess! (${result.city.name})`, 'text-success');
             createCityElement(result.city);
             break;
         default:
