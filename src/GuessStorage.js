@@ -1,9 +1,12 @@
+const fs = require('fs');
 const Stats = require("./Stats.js").Stats;
 
 class GuessStorage {
     constructor(cities) {
         this.allCities = cities;
-        this.guessedCities = [];
+        const guessData = fs.readFileSync('./src/citydata/guessData.json');
+        this.guessedCities = JSON.parse(guessData);
+        console.log(this.guessedCities)
         this.stats = new Stats(cities);
     }
 
@@ -39,6 +42,9 @@ class GuessStorage {
     #addCity(city) {
         this.guessedCities.push(city);
         this.stats.update(this.guessedCities);
+        fs.writeFile("./src/citydata/guessData.json", JSON.stringify(this.guessedCities), (err) => {
+            if(err) return console.log(err);
+        });
     }
 
     #isMatching(cityName, city) {
