@@ -23,7 +23,17 @@ function addCircle(lat, lon, population) {
         color: 'red',
         fillColor: '#f03',
         fillOpacity: 0.5,
-        radius: 10,
+        radius: getRadius(population),
         pane: 'circles'
     }).addTo(map)
+}
+
+function getRadius(population) {
+    if(population >= 5000000)
+        return 8;
+    if(population >= 1000000)
+        return 7;
+    if(population >= 100000)
+        return 6;
+    return 5;
 }
