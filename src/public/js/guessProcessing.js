@@ -32,6 +32,7 @@ function createCityElement(city) {
         item.textContent += " ★";
     }
     cities.appendChild(item);
+    addCircle(city.coordinates.lat, city.coordinates.lon, city.population);
 }
 
 function createStatElement(stat) {
