@@ -9,6 +9,8 @@ function processResult(result) {
         case "correct":
             createLogElement(`[${result.guesser.username}] Correct Guess! (${result.city.name})`, 'text-success');
             createCityElement(result.city);
+            if(result.guesser.id == socket.id)
+                playSuccess();
             break;
         default:
             createLogElement(`[ERROR] unidentified result.msg: (${result.msg})`);
@@ -31,7 +33,7 @@ function createCityElement(city) {
     if(city.capital == true) {
         item.textContent += " ★";
     }
-    cities.appendChild(item);
+    cities.insertBefore(item, cities.childNodes[0]);
     addCircle(city.coordinates.lat, city.coordinates.lon, city.population);
 }
 
@@ -50,5 +52,36 @@ function createLogElement(message, ...cssClasses) {
     if (cssClasses && cssClasses.length > 0) {
         item.classList.add(...cssClasses);
     }
-    log.appendChild(item);
+    log.insertBefore(item, log.childNodes[0]);
+}
+
+const playSuccess = () => {
+    const context = new window.AudioContext();
+    const successNoise = context.createOscillator();
+    successNoise.frequency = "600";
+    successNoise.type = "sine";
+    successNoise.frequency.exponentialRampToValueAtTime(
+        800,
+        context.currentTime + 0.05
+    );
+    successNoise.frequency.exponentialRampToValueAtTime(
+        1000,
+        context.currentTime + 0.15
+    );
+
+    successGain = context.createGain();
+    successGain.gain.exponentialRampToValueAtTime(
+        0.01,
+        context.currentTime + 0.3
+    );
+
+    successFilter = context.createBiquadFilter("bandpass");
+    successFilter.Q = 0.01;
+
+    successNoise
+        .connect(successFilter)
+        .connect(successGain)
+        .connect(context.destination);
+    successNoise.start();
+    successNoise.stop(context.currentTime + 0.2);
 }

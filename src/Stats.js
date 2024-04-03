@@ -23,9 +23,9 @@ class Stats {
     update(guessedCities) {
         this.citiesGuessed = guessedCities.length;
         this.capitalsGuessed = guessedCities.filter(x => x.capital == true).length;
-        this.citiesOver1Mguessed = guessedCities.filter(x => x.population >= 5000000).length;
+        this.citiesOver5Mguessed = guessedCities.filter(x => x.population >= 5000000).length;
         this.citiesOver1Mguessed = guessedCities.filter(x => x.population >= 1000000).length;
-        this.citiesOver1Mguessed = guessedCities.filter(x => x.population >= 100000).length;
+        this.citiesOver100kguessed = guessedCities.filter(x => x.population >= 100000).length;
         this.populationGuessed = guessedCities.reduce((a,b) => a + b.population, 0);
         this.populationGuessedPercent = `${this.populationGuessed.toLocaleString("en-US")} (${(this.populationGuessed / this.totalPopulation * 100).toFixed(2)}%)`
     }
