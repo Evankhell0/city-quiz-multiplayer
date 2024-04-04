@@ -7,6 +7,7 @@ class GuessStorage {
         const guessData = fs.readFileSync('./src/citydata/guessData.json');
         this.guessedCities = guessData ? JSON.parse(guessData) : [];
         this.stats = new Stats(cities);
+        this.stats.update(this.guessedCities)
     }
 
     // process guesses coming from players, returns object{msg, city, guesser}
