@@ -1,4 +1,5 @@
 const countries = {
+    "Any": "Any",
     "AF": "Afghanistan",
     "AL": "Albania",
     "DZ": "Algeria",
@@ -257,4 +258,8 @@ for (const [key, value] of Object.entries(countries)) {
     opt.value = value;
     opt.innerHTML = value;
     selectElement.appendChild(opt)
+}
+
+function getCountryCode(name) {
+    return Object.keys(countries).find(key => countries[key] === name);
 }

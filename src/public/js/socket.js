@@ -10,8 +10,11 @@ const userlist = document.getElementById('userlist');
 
 form.addEventListener("submit", (e) => {
     e.preventDefault();
-    if (input.value) {
-        socket.emit("guess", input.value);
+    if(input.value) {
+        socket.emit("guess", {
+            "city": input.value,
+            "country": getCountryCode(select.value)
+        });
         input.value = "";
     }
 });

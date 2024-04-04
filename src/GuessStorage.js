@@ -10,8 +10,8 @@ class GuessStorage {
     }
 
     // process guesses coming from players, returns object{msg, city, guesser}
-    guess(cityName, user) {
-        let matchingCities = this.allCities.filter(city => this.#isMatching(cityName, city));
+    guess(cityName, user, country = "Any") {
+        let matchingCities = this.allCities.filter(city => this.#isMatching(cityName, city, country));
         matchingCities = matchingCities.sort((a, b) => b.population - a.population);
 
         if(!matchingCities.length) {
@@ -21,7 +21,7 @@ class GuessStorage {
         const largestMatchingCity = matchingCities[0];
         largestMatchingCity.name = this.#toTitleCase(largestMatchingCity.name);
 
-        if(this.guessedCities.some(city => this.#isMatching(largestMatchingCity.name, city))) {
+        if(this.guessedCities.some(city => this.#isMatching(largestMatchingCity.name, city, country))) {
             return this.#createGuessObj("duplicate", largestMatchingCity, user);
         }
 
@@ -46,11 +46,12 @@ class GuessStorage {
         });
     }
 
-    #isMatching(cityName, city) {
+    #isMatching(cityName, city, country = "Any") {
         cityName = cityName.toLowerCase();
-        return cityName == city.name?.toLowerCase()
+        return (cityName == city.name?.toLowerCase()
                 || cityName == city.ascii_name?.toLowerCase()
-                || city.alternate_names?.map(c => c.toLowerCase())?.includes(cityName);
+                || city.alternate_names?.map(c => c.toLowerCase())?.includes(cityName))
+                && (city.country_code == country || country == "Any");
     }
 
     #toTitleCase(str) {

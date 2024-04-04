@@ -64,8 +64,8 @@ io.on('connection', (socket) => {
         io.emit("userlist", userlist);
     });
 
-    socket.on("guess", (cityGuess) => {
-        const guessResult = guessStorage.guess(cityGuess, {"id": socket.id, "username": socket.username});
+    socket.on("guess", (guess) => {
+        const guessResult = guessStorage.guess(guess.city, {"id": socket.id, "username": socket.username}, guess.country);
         if(guessResult.msg == "correct") {
             console.log(guessResult.city);
         }
@@ -74,6 +74,6 @@ io.on('connection', (socket) => {
     });
 });
 
-server.listen(3000, () => {
-    console.log('listening on *:3000');
+server.listen(3001, () => {
+    console.log('listening on *:3001');
 });
