@@ -10,6 +10,9 @@ var myCustomStyle = {
 
 var map = L.map('map').setView([40, 0], 2);
 map.createPane('circles');
+map.createPane('capitals');
+map.getPane('capitals').style.zIndex = 405;
+
 var geojsonLayer = L.geoJson(null, {
     style: myCustomStyle
 }).addTo(map);
@@ -24,7 +27,7 @@ function addCircle(lat, lon, population, capital) {
         fillColor: capital ? '#b5021a' : '#f03',
         fillOpacity: 0.5,
         radius: 6,
-        pane: 'circles'
+        pane: capital ? 'capitals' : 'circles'
     }).addTo(map)
 }
 
