@@ -18,12 +18,12 @@ $.getJSON(myGeoJSONPath,function(data){
     geojsonLayer.addData(data);
 })
 
-function addCircle(lat, lon, population) {
+function addCircle(lat, lon, population, capital) {
     var circle = L.circleMarker([lat, lon], {
-        color: 'red',
-        fillColor: '#f03',
+        color: capital ? '#b5021a' : 'red',
+        fillColor: capital ? '#b5021a' : '#f03',
         fillOpacity: 0.5,
-        radius: getRadius(population),
+        radius: 6,
         pane: 'circles'
     }).addTo(map)
 }
