@@ -6,7 +6,7 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 
 const allCities = require("./citydata/cities1000.json");
-const GuessStorage = require("./GuessStorage.js").GuessStorage;
+const GuessStorage = require("./GuessStorage.js");
 const guessStorage = new GuessStorage(allCities);
 
 let userlist = [];

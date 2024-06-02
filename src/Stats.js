@@ -74,4 +74,4 @@ class Stats {
     }
 }
 
-module.exports = { Stats };
+module.exports = Stats;

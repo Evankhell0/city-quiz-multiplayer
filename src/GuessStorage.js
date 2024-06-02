@@ -1,5 +1,5 @@
 const fs = require('fs');
-const Stats = require("./Stats.js").Stats;
+const Stats = require("./Stats.js");
 
 class GuessStorage {
     constructor(cities) {
@@ -60,4 +60,4 @@ class GuessStorage {
     }
 }
 
-module.exports = { GuessStorage };
+module.exports = GuessStorage;
