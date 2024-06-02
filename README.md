@@ -7,8 +7,8 @@ Install dependencies before first start.
 ```
 npm install
 ```
-To start the server either run node . from console or execute the batch file.
+To start the server run node . from your console.
 ```
 node .
 ```
-Connect to the website using http://localhost:3000/
+Connect to the website using http://localhost:3001/
