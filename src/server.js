@@ -5,41 +5,7 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 
-const Lobby = require("./Lobby.js");
-const lobby = new Lobby();
-
-let userlist = [];
-const randomUserNames = [
-  "SunnyDaze",
-  "PixelPirate",
-  "RainbowNinja",
-  "StarGazer",
-  "MoonWalker",
-  "CrimsonScribe",
-  "LuckyLion",
-  "ElectricJolt",
-  "RubyRider",
-  "SilverFox",
-  "AquaWhisper",
-  "GoldenSnitch",
-  "MysticWanderer",
-  "ShadowPulse",
-  "CeruleanDream",
-  "VelvetVoyager",
-  "NeonNomad",
-  "CopperCrafter",
-  "JadeJester",
-  "AmberAlchemy",
-  "EmeraldEnigma",
-  "ObsidianOracle",
-  "PlatinumPioneer",
-  "TopazTinkerer",
-  "OnyxOpus",
-  "CrystalCaster",
-  "MarbleMaestro",
-  "QuasarQuest",
-  "GalacticGlider"
-];
+const Data = require("./Data.js");
 
 app.use(express.static("src/public"));
 
@@ -50,26 +16,40 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
     console.log('a user connected');
 
-    socket.username = randomUserNames.pop() ?? "Unnamed";
-    userlist.push(socket.username);
+    // replace this with login logic
+        socket.user = Data.users[0];
+        socket.user.online = true;
 
-    io.emit("guessedCities", lobby.getGuessedCities());
-    io.emit("userlist", userlist);
-    io.emit("stats", lobby.getStats());
+    socket.on('joinLobby', (id) => {
+        const lobby = Data.getLobby(id);
 
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
-        userlist = userlist.filter(u => u != socket.username);
-        io.emit("userlist", userlist);
-    });
-
-    socket.on("guess", (guess) => {
-        const guessResult = lobby.makeGuess(guess, socket);
-        if(guessResult.msg == "correct") {
-            console.log(guessResult.city);
+        // validate if user has access to lobby here
+        if(!lobby.hasAccess(socket.user.id)) {
+            // emit that no access
+            console.log("no access")
+            //return;
         }
-        io.emit("guessResult", guessResult);
-        io.emit("stats", lobby.getStats());
+
+        console.log(socket.user.username + ' joined lobby ' + id);
+
+        socket.emit("guessedCities", lobby.getGuessedCities());
+        socket.emit("userlist", lobby.getUsers());
+        socket.emit("stats", lobby.getStats());
+
+        socket.on('disconnect', () => {
+            console.log('user disconnected');
+            socket.user.online = false;
+            io.emit("userlist", lobby.getUsers());
+        });
+
+        socket.on("guess", (guess) => {
+            const guessResult = lobby.makeGuess(guess, socket);
+            if(guessResult.msg == "correct") {
+                console.log(guessResult.city);
+            }
+            io.emit("guessResult", guessResult);
+            io.emit("stats", lobby.getStats());
+        });
     });
 });
 

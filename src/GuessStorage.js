@@ -1,11 +1,9 @@
-const fs = require('fs');
 const Stats = require("./Stats.js");
 
 class GuessStorage {
-    constructor(cities) {
+    constructor(cities, guessedCities) {
         this.allCities = cities;
-        const guessData = fs.readFileSync('./src/citydata/guessData.json');
-        this.guessedCities = guessData ? JSON.parse(guessData) : [];
+        this.guessedCities = guessedCities;
         this.stats = new Stats(cities);
         this.stats.update(this.guessedCities)
     }
