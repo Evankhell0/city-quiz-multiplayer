@@ -5,9 +5,8 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 
-const allCities = require("./citydata/cities1000.json");
-const GuessStorage = require("./GuessStorage.js");
-const guessStorage = new GuessStorage(allCities);
+const Lobby = require("./Lobby.js");
+const lobby = new Lobby();
 
 let userlist = [];
 const randomUserNames = [
@@ -54,9 +53,9 @@ io.on('connection', (socket) => {
     socket.username = randomUserNames.pop() ?? "Unnamed";
     userlist.push(socket.username);
 
-    io.emit("guessedCities", guessStorage.guessedCities);
+    io.emit("guessedCities", lobby.getGuessedCities());
     io.emit("userlist", userlist);
-    io.emit("stats", guessStorage.stats.format());
+    io.emit("stats", lobby.getStats());
 
     socket.on('disconnect', () => {
         console.log('user disconnected');
@@ -65,12 +64,12 @@ io.on('connection', (socket) => {
     });
 
     socket.on("guess", (guess) => {
-        const guessResult = guessStorage.guess(guess.city, {"id": socket.id, "username": socket.username}, guess.country);
+        const guessResult = lobby.makeGuess(guess, socket);
         if(guessResult.msg == "correct") {
             console.log(guessResult.city);
         }
         io.emit("guessResult", guessResult);
-        io.emit("stats", guessStorage.stats.format());
+        io.emit("stats", lobby.getStats());
     });
 });
 
