@@ -50,7 +50,7 @@ class Data {
     }
 
     static getUser() {
-        return this.users[0]
+        return this.users[0];
     }
 
     static getLobby(id) {

@@ -10,7 +10,11 @@ const Data = require("./Data.js");
 app.use(express.static("src/public"));
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/index.html');
+    res.sendFile(__dirname + '/public/game/index.html');
+});
+
+app.get('/lobby', (req, res) => {
+    res.sendFile(__dirname + '/public/personal/index.html');
 });
 
 io.on('connection', (socket) => {
@@ -26,7 +30,7 @@ io.on('connection', (socket) => {
         // validate if user has access to lobby here
         if(!lobby.hasAccess(socket.user.id)) {
             // emit that no access
-            console.log("no access")
+            console.log("no access");
             //return;
         }
 

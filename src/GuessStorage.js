@@ -5,7 +5,7 @@ class GuessStorage {
         this.allCities = cities;
         this.guessedCities = guessedCities;
         this.stats = new Stats(cities);
-        this.stats.update(this.guessedCities)
+        this.stats.update(this.guessedCities);
     }
 
     // process guesses coming from players, returns object{msg, city, guesser}
