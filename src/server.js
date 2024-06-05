@@ -55,6 +55,10 @@ io.on('connection', (socket) => {
             io.emit("stats", lobby.getStats());
         });
     });
+
+    socket.on('personalPage', () => {
+        socket.emit("playerData", socket.user);
+    });
 });
 
 server.listen(3001, () => {
