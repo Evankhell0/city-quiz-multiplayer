@@ -27,7 +27,7 @@ class Lobby {
     }
 
     makeGuess(guess, socket) {
-        return this.guessStorage.guess(guess.city, {"id": socket.id, "username": socket.username}, guess.country)
+        return this.guessStorage.guess(guess.city, {"id": socket.id, "username": socket.user.username}, guess.country);
     }
 
     addPlayer(user) {
