@@ -21,8 +21,32 @@ app.get('/lobbies', (req, res) => {
     res.sendFile(__dirname + '/public/personal/index.html');
 });
 
+app.get('/login', (req, res) => {
+    res.sendFile(__dirname + '/public/login/index.html');
+});
+
+app.get('/register', (req, res) => {
+    res.sendFile(__dirname + '/public/register/index.html');
+});
+
 io.on('connection', (socket) => {
     console.log('a user connected');
+
+    socket.on('login', (data) => {
+        /*const reponse = DB.loginUser(data.username, data.password)
+        if(response) {
+            socket.emit("loginSuccess");
+        } else {
+            socket.emit("loginFailed");
+        }*/
+        console.log("received login request");
+        socket.emit("loginSuccess");
+    });
+
+    socket.on('register', (data) => {
+        console.log("received register request");
+        socket.emit("registerSuccess");
+    });
 
     // replace this with login logic
         socket.user = Data.users[0];
