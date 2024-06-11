@@ -8,6 +8,7 @@ socket.on("playerData", (data) => {
     // Todo
         document.body.append(JSON.stringify(data));
 
+    // also send/show total cities guessed
     const SAMPLE_LOBBIES = [
         {id: 534, name: "Nikola's Lobby", type: 0},
         {id: 727, name: "Evankhell's Lobby", type: 0},
@@ -26,6 +27,9 @@ const createLobbyDiv = (lobby) => {
 
     const button = document.createElement('button');
     button.innerHTML = "Join Lobby";
+    button.onclick = () => {
+        location.href = `/lobby/${lobby.id}`;
+    }
 
     item.appendChild(span);
     item.appendChild(button);

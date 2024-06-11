@@ -7,13 +7,17 @@ const io = new Server(server);
 
 const Data = require("./Data.js");
 
-app.use(express.static("src/public"));
+app.use(express.static(__dirname + "/public"));
 
 app.get('/', (req, res) => {
+    res.redirect('/lobbies');
+});
+
+app.get('/lobby/:id([0-9]+)', (req, res) => {
     res.sendFile(__dirname + '/public/game/index.html');
 });
 
-app.get('/lobby', (req, res) => {
+app.get('/lobbies', (req, res) => {
     res.sendFile(__dirname + '/public/personal/index.html');
 });
 
