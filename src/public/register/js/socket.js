@@ -2,19 +2,37 @@ const socket = io();
 
 window.onload = function(e) {
     document.getElementById("submitButton").onclick = () => {
-        const SAMPLE_REGISTER_INFO = {
-           username: "niko123",
-           password: "passwort656437896"
+        
+
+       
+
+
+        const username = document.getElementById("nameInput").value;
+        const password = document.getElementById("passwordInput").value;
+
+        if (username === "" || password === "") {
+            alert("Please enter both a username and a password.");
+            return;
         }
 
-        socket.emit("register", SAMPLE_REGISTER_INFO);
+        const registerInfo = {
+            username: username,
+            password: password
+         }
+
+        socket.emit("register", registerInfo);
+    }
+    document.getElementById("ref").onclick = () =>{
+        window.location.href = `/login`;
+        console.log("HSHDHSD")
     }
 }
 
 socket.on("registerSuccess", () => {
-
+    window.location.href = `/login`;
 });
 
-socket.on("registerFailed", () => {
-    // could fail if username is already taken etc.
+socket.on("registerFailed", (reason) => {
+    alert("Register Failed:", reason);
 });
+

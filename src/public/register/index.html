@@ -5,13 +5,45 @@
     <meta charset="utf-8" />
     <script src="/socket.io/socket.io.js"></script>
     <script src="/register/js/socket.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 
 <body>
-    <h1>Register Page</h1>
-    <input id="nameInput"></input>
-    <input id="passwordInput"></input>
-    <button id="submitButton">Submit</button>
+    <section class="vh-100 bg-image">
+  <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+    <div class="container h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+          <div class="card" style="border-radius: 15px;">
+            <div class="card-body p-5">
+              <h2 class="text-uppercase text-center mb-5">Create an account</h2>
+
+
+                <div data-mdb-input-init class="form-outline mb-4">
+                  <input type="text" id="nameInput" placeholder="Name" class="form-control form-control-lg" />
+                </div>
+
+
+                <div data-mdb-input-init class="form-outline mb-4">
+                  <input type="password" id="passwordInput" placeholder="Password" class="form-control form-control-lg" />
+                  
+                </div>
+
+
+                <div class="d-flex justify-content-center">
+                  <button  id="submitButton" type="button" data-mdb-button-init
+                    data-mdb-ripple-init class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Register</button>
+                </div>
+
+                <p class="text-center text-muted mt-5 mb-0">Have an account? <a href="#" id="ref" class="fw-bold text-body"><u>Login here</u></a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
 </body>
 
 </html>
