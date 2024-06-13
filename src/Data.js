@@ -39,9 +39,9 @@ class Data {
 
     static {
         // call DB stuff here instead of hardcoding the data
-        this.lobbies.push(new Lobby(727), new Lobby(999));
+        //this.lobbies.push(new Lobby(727), new Lobby(999));
         this.registerUser();
-        this.getLobby(727).addPlayer(this.users[0]);
+        //this.getLobby(727).addPlayer(this.users[0]);
     }
 
     static registerUser(id, username) {
@@ -54,7 +54,12 @@ class Data {
     }
 
     static getLobby(id) {
-        return this.lobbies.find(x => x.id == id);
+        const lobby = this.lobbies.find(x => x.id == id);
+        if(lobby) {
+            return lobby;
+        }
+        const newLobby = new Lobby(id);
+        return newLobby;
     }
 }
 

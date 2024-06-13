@@ -1,17 +1,9 @@
 const allCities = require("./citydata/cities1000.json");
 const GuessStorage = require("./GuessStorage.js");
-const fs = require('fs');
 
 class Lobby {
-    constructor(id = 0, name = "Nikola's Lobby", type = 0, players = []) {
-        // Temp
-            let guessedCities = [];
-            if(id == 727) {
-                const guessData = fs.readFileSync('./src/citydata/guessData.json');
-                guessedCities = guessData ? JSON.parse(guessData) : [];
-            }
-
-        this.guessStorage = new GuessStorage(allCities, guessedCities);
+    constructor(id = 0, name = "Unnamed Lobby", type = 0, players = []) {
+        this.guessStorage = new GuessStorage(id, allCities);
         this.id = id;
         this.name = name;
         this.type = type;

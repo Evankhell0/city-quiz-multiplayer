@@ -9,8 +9,8 @@ const log = document.getElementById('log');
 const userlist = document.getElementById('userlist');
 
 window.onload = function(e) {
-    const PLACEHOLDER_ID = 727;
-    socket.emit("joinLobby", PLACEHOLDER_ID);
+    const lobbyId = window.location.pathname.split("/").pop();
+    socket.emit("joinLobby", lobbyId);
 }
 
 form.addEventListener("submit", (e) => {
