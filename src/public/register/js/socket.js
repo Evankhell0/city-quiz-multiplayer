@@ -2,11 +2,6 @@ const socket = io();
 
 window.onload = function(e) {
     document.getElementById("submitButton").onclick = () => {
-        
-
-       
-
-
         const username = document.getElementById("nameInput").value;
         const password = document.getElementById("passwordInput").value;
 
@@ -35,4 +30,3 @@ socket.on("registerSuccess", () => {
 socket.on("registerFailed", (reason) => {
     alert("Register Failed:", reason);
 });
-

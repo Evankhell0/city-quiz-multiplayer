@@ -1,4 +1,5 @@
 const sqlite3 = require("sqlite3");
+const bcrypt = require("bcrypt");
 
 const SQL_CREATE_TABLE_LOBBY = `CREATE TABLE if not exists "Lobby" (
 	   "LobbyID"    INTEGER NOT NULL UNIQUE,
@@ -29,7 +30,7 @@ const SQL_JOIN_LOBBY = `INSERT INTO User_Lobby_Xref VALUES (?,?)`;
 
 
 class Database {
-   constructor() {
+   static {
       this.db = new sqlite3.Database("./data/database.db", sqlite3.OPEN_READWRITE, (err) => {
          if (err) return console.log(err);
       })
@@ -38,47 +39,38 @@ class Database {
       this.db.run(SQL_CREATE_TABLE_USER_LOBBY_XREF);
    }
 
-   registerUser(username, password) {
+   static registerUser(username, password) {
+	  //const hashedPassword = hash(password);
       this.db.run(SQL_REGISTER_USER, [username, password]);
    }
 
-   async validateLogin(username) {
+   static async validateLogin(username) {
       return new Promise((resolve, reject) => {
          this.db.get(SQL_VALIDATE_LOGIN, [username], (err, rows) => {
             resolve(rows);
          })
       })
-
    }
 
-   async getLobbies() {
+   static async getLobbies() {
       return new Promise((resolve, reject) => {
-         this.db.get(SQL_GET_LOBBIES, [], (err, rows) => {
+         this.db.all(SQL_GET_LOBBIES, [], (err, rows) => {
             resolve(rows);
          })
       })
-
    }
 
- 
-   async getUsers() {
+   static async getUsers() {
       return new Promise((resolve, reject) => {
-         this.db.get(SQL_GET_USERS, [], (err, rows) => {
+         this.db.all(SQL_GET_USERS, [], (err, rows) => {
             resolve(rows);
          })
       })
-
    }
 
-   joinLobby(lobbyID, userID) {
+   static joinLobby(lobbyID, userID) {
       this.db.run(SQL_JOIN_LOBBY, [lobbyID, userID]);
    }
-
 }
 
-const db = new Database();
-//db.registerUser(`Nikola`, `1234`)
-db.validateLogin(`Nikola`).then(x => console.log(x))
-db.getLobbies
-db.getUsers
-db.joinLobby(2, 23)
+module.exports = Database;

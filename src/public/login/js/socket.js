@@ -1,9 +1,6 @@
 const socket = io();
 window.onload = function(e) {
     document.getElementById("submitButton").onclick = () => {
-        
-
-
         const username = document.getElementById("nameInput").value;
         const password = document.getElementById("passwordInput").value;
 
@@ -15,7 +12,7 @@ window.onload = function(e) {
         const loginInfo = {
             username: username,
             password: password
-         }
+        }
 
         socket.emit("login", loginInfo);
     }
@@ -25,9 +22,10 @@ window.onload = function(e) {
 }
 
 socket.on("loginSuccess", () => {
+    console.log("success")
     window.location.href = `/lobbies`;
 });
 
 socket.on("loginFailed", (reason) => {
-    alert("Login Failed:", reason);
+    alert("Login Failed: " + reason);
 });

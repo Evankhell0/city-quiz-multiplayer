@@ -6,6 +6,7 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 
 const Data = require("./Data.js");
+const DB = require("./db.js");
 
 app.use(express.static(__dirname + "/public"));
 
@@ -33,18 +34,17 @@ io.on('connection', (socket) => {
     console.log('a user connected');
 
     socket.on('login', (data) => {
-        /*const reponse = DB.loginUser(data.username, data.password)
-        if(response) {
-            socket.emit("loginSuccess");
-        } else {
-            socket.emit("loginFailed");
-        }*/
-        console.log("received login request");
-        socket.emit("loginSuccess");
+        DB.validateLogin(data.username, data.password).then(res => {
+            if(res) {
+                socket.emit("loginSuccess");
+            } else {
+                socket.emit("loginFailed", "Invalid Username or Password");
+            }
+        })
     });
 
     socket.on('register', (data) => {
-        console.log("received register request");
+        DB.registerUser(data.username, data.password);
         socket.emit("registerSuccess");
     });
 
