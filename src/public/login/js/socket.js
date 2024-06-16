@@ -17,17 +17,17 @@ window.onload = function(e) {
             password: password
          }
 
-        socket.emit("register", loginInfo);
+        socket.emit("login", loginInfo);
     }
     document.getElementById("ref").onclick = () =>{
         window.location.href = `/register`;
     }
 }
 
-socket.on("registerSuccess", () => {
+socket.on("loginSuccess", () => {
     window.location.href = `/lobbies`;
 });
 
-socket.on("registerFailed", (reason) => {
-    alert("Register Failed:", reason);
+socket.on("loginFailed", (reason) => {
+    alert("Login Failed:", reason);
 });
