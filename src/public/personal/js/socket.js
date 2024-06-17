@@ -15,7 +15,7 @@ socket.on("playerData", (data) => {
         {id: 999, name: "Cityquizzing", type: 1}
     ];
 
-    SAMPLE_LOBBIES.forEach(x => createLobbyDiv(x));
+    data.lobbies.forEach(x => createLobbyDiv(x));
 });
 
 const createLobbyDiv = (lobby) => {
@@ -23,12 +23,12 @@ const createLobbyDiv = (lobby) => {
     const item = document.createElement('div');
 
     const span = document.createElement('span');
-    span.textContent = `[${lobby.id}] ${lobby.name} (${lobby.type})`;
+    span.textContent = `[${lobby.LobbyID}] ${lobby.LobbyName} (${lobby.Lobbytype})`;
 
     const button = document.createElement('button');
     button.innerHTML = "Join Lobby";
     button.onclick = () => {
-        location.href = `/lobby/${lobby.id}`;
+        location.href = `/lobby/${lobby.LobbyID}`;
     }
 
     item.appendChild(span);

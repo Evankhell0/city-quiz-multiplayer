@@ -46,7 +46,7 @@ class Data {
 
     static registerUser(id, username) {
         const placeholderName = randomUserNames.pop() ?? "Unnamed";
-        this.users.push(new User(0, placeholderName));
+        this.users.push(new User(1, placeholderName));
     }
 
     static getUser() {
