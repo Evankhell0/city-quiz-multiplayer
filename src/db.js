@@ -42,7 +42,6 @@ class Database {
    static async registerUser(username, password) {
       try {
         const hashedPassword = await bcrypt.hash(password, 10);
-        console.log(hashedPassword);
         this.db.run(SQL_REGISTER_USER, [username, hashedPassword]);
       } catch (err) {
         console.error(err);
