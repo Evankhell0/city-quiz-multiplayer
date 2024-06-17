@@ -23,7 +23,7 @@ const SQL_CREATE_TABLE_USER_LOBBY_XREF = `CREATE TABLE if not exists "User_Lobby
 
 const SQL_REGISTER_USER = `INSERT INTO User (Username,Password) VALUES (?,?)`;
 const SQL_CREATE_LOBBY = `INSERT INTO Lobby (LobbyName,Host,Lobbytype) VALUES (?,?,?)`;
-const SQL_VALIDATE_LOGIN = `SELECT Password FROM User WHERE Username = ?`; //DB mach das WORK IN PROGRESS
+const SQL_VALIDATE_LOGIN = `SELECT Password FROM User WHERE Username = ?`; 
 const SQL_GET_LOBBIES = `SELECT * FROM Lobby`;
 const SQL_GET_USERS = `SELECT UserID,Username FROM User`;
 const SQL_JOIN_LOBBY = `INSERT INTO User_Lobby_Xref VALUES (?,?)`;
@@ -39,10 +39,15 @@ class Database {
       this.db.run(SQL_CREATE_TABLE_USER_LOBBY_XREF);
    }
 
-   static registerUser(username, password) {
-	  //const hashedPassword = hash(password);
-      this.db.run(SQL_REGISTER_USER, [username, password]);
-   }
+   static async registerUser(username, password) {
+      try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        console.log(hashedPassword);
+        this.db.run(SQL_REGISTER_USER, [username, hashedPassword]);
+      } catch (err) {
+        console.error(err);
+      }
+    }
 
    static async validateLogin(username) {
       return new Promise((resolve, reject) => {
