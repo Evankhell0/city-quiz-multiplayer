@@ -34,20 +34,23 @@ const SQL_GET_LOBBY_BY_LOBBY_ID = `SELECT * FROM Lobby WHERE LobbyID = ?`;
 class Database {
    static {
       this.db = new sqlite3.Database("./data/database.db", sqlite3.OPEN_READWRITE, (err) => {
-         if (err) return console.log(err);
-      })
+         if(err) return console.log(err);
+      });
       this.db.run(SQL_CREATE_TABLE_LOBBY);
       this.db.run(SQL_CREATE_TABLE_USER);
       this.db.run(SQL_CREATE_TABLE_USER_LOBBY_XREF);
    }
 
    static async registerUser(username, password) {
-      try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        this.db.run(SQL_REGISTER_USER, [username, hashedPassword]);
-      } catch (err) {
-        console.error(err);
-      }
+	   return new Promise((resolve, reject) => {
+		   const hashedPassword = bcrypt.hash(password, 10);
+		   this.db.run(SQL_REGISTER_USER, [username, hashedPassword], (err) => {
+		   		if(err)
+			   		reject(err);
+				else
+					resolve("success");
+		   });
+	   });
     }
 
    static async validateLogin(username,password) {
@@ -100,7 +103,9 @@ class Database {
    }
 
    static createLobby(lobbyName, hostID, lobbyType = 0) {
-      this.db.run(SQL_CREATE_LOBBY, [lobbyName, hostID, lobbyType]);
+	   this.db.run(SQL_CREATE_LOBBY, [lobbyName, hostID, lobbyType], (err) => {
+		   if(err) return console.log(err);
+	   });
    }
 }
 

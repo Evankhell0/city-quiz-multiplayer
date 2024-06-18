@@ -28,5 +28,5 @@ socket.on("registerSuccess", () => {
 });
 
 socket.on("registerFailed", (reason) => {
-    alert("Register Failed:", reason);
+    alert("Register Failed: " + reason);
 });

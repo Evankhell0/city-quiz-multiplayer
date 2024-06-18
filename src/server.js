@@ -44,8 +44,11 @@ io.on('connection', (socket) => {
     });
 
     socket.on('register', (data) => {
-        DB.registerUser(data.username, data.password);
-        socket.emit("registerSuccess");
+        DB.registerUser(data.username, data.password).then((res) => {
+            socket.emit("registerSuccess");
+        }).catch((err) => {
+            socket.emit("registerFailed", "Username already exists... probably");
+        });
     });
 
     // replace this with login logic
