@@ -50,10 +50,11 @@ class Database {
       }
     }
 
-   static async validateLogin(username) {
+   static async validateLogin(username,password) {
       return new Promise((resolve, reject) => {
          this.db.get(SQL_VALIDATE_LOGIN, [username], (err, rows) => {
-            resolve(rows);
+            const result = bcrypt.compare(password,rows.Password)
+            resolve(result);
          })
       })
    }
