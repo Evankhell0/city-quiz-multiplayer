@@ -1,5 +1,6 @@
 const sqlite3 = require("sqlite3");
 const bcrypt = require("bcrypt");
+const fs = require('fs');
 
 const SQL_CREATE_TABLE_LOBBY = `CREATE TABLE if not exists "Lobby" (
 		"LobbyID"    INTEGER NOT NULL UNIQUE,
@@ -30,11 +31,19 @@ const SQL_GET_USERS = `SELECT UserID,Username FROM User`;
 const SQL_JOIN_LOBBY = `INSERT INTO User_Lobby_Xref VALUES (?,?)`;
 const SQL_GET_LOBBIES_BY_USER_ID = `SELECT * FROM User_Lobby_Xref WHERE UserID = ?`;
 const SQL_GET_LOBBY_BY_LOBBY_ID = `SELECT * FROM Lobby WHERE LobbyID = ?`;
-const SQL_REMOVE_PLAYER_FROM_LOBBY =   `DELETE FROM "User_Lobby_Xref" WHERE "LobbyID" = ? AND "UserID" = ?;`
+const SQL_REMOVE_PLAYER_FROM_LOBBY = `DELETE FROM "User_Lobby_Xref" WHERE "LobbyID" = ? AND "UserID" = ?;`
 const SQL_DELETE_LOBBY = `DELETE FROM "Lobby" WHERE "LobbyID" = ?;`;
 
 class Database {
    static {
+	  if(!fs.existsSync("./data/database.db")) {
+           if(!fs.existsSync("./data/")) {
+               fs.mkdir("./data/", (err) => {
+                   if(err) return console.log(err);
+               });
+           }
+		   fs.writeFileSync("./data/database.db", "");
+      }
       this.db = new sqlite3.Database("./data/database.db", sqlite3.OPEN_READWRITE, (err) => {
          if(err) return console.log(err);
       });
@@ -113,12 +122,11 @@ class Database {
    static async removePlayerFromLobby(lobbyID, userID) {
       return new Promise((resolve, reject) => {
          this.db.run(SQL_REMOVE_PLAYER_FROM_LOBBY, [lobbyID, userID], (err) => {
-            if (err) {
-               reject(err)
-            }else {
-               resolve("success")
+            if(err) {
+               reject(err);
+            } else {
+               resolve("success");
             }
-            
          })
       })
    }
@@ -126,12 +134,11 @@ class Database {
    static async deleteLobby(lobbyID) {
       return new Promise((resolve, reject) => {
          this.db.run(SQL_DELETE_LOBBY, [lobbyID], (err) => {
-            if (err) {
+            if(err) {
                reject(err);
-            }
-            else{
+            } else{
                resolve("success");
-            } 
+            }
          })
       })
    }

@@ -42,6 +42,11 @@ class GuessStorage {
 
     #loadGuessedCities() {
         let guessedCities = [];
+        if(!fs.existsSync("./src/citydata/lobbydata/")) {
+            fs.mkdir("./src/citydata/lobbydata/", (err) => {
+                if(err) return console.log(err);
+            });
+        }
         if(fs.existsSync(`./src/citydata/lobbydata/${this.id}.json`)) {
             const guessData = fs.readFileSync(`./src/citydata/lobbydata/${this.id}.json`);
             guessedCities = guessData ? JSON.parse(guessData) : [];
