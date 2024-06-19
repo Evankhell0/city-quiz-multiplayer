@@ -20,7 +20,7 @@ const SQL_CREATE_TABLE_USER = `CREATE TABLE if not exists "User" (
 const SQL_CREATE_TABLE_USER_LOBBY_XREF = `CREATE TABLE if not exists "User_Lobby_Xref" (
 		"LobbyID"	INTEGER,
 	    "UserID"	INTEGER,
-		FOREIGN KEY("LobbyID") REFERENCES "Lobby"("LobbyID") ON DELETE CASCADE
+		FOREIGN KEY("LobbyID") REFERENCES "Lobby"("LobbyID")
 );`;
 
 const SQL_REGISTER_USER = `INSERT INTO User (Username,Password) VALUES (?,?)`;
@@ -31,8 +31,10 @@ const SQL_GET_USERS = `SELECT UserID,Username FROM User`;
 const SQL_JOIN_LOBBY = `INSERT INTO User_Lobby_Xref VALUES (?,?)`;
 const SQL_GET_LOBBIES_BY_USER_ID = `SELECT * FROM User_Lobby_Xref WHERE UserID = ?`;
 const SQL_GET_LOBBY_BY_LOBBY_ID = `SELECT * FROM Lobby WHERE LobbyID = ?`;
-const SQL_REMOVE_PLAYER_FROM_LOBBY = `DELETE FROM "User_Lobby_Xref" WHERE "LobbyID" = ? AND "UserID" = ?;`
+const SQL_REMOVE_PLAYER_FROM_LOBBY = `DELETE FROM "User_Lobby_Xref" WHERE "LobbyID" = ? AND "UserID" = ?;`;
+const SQL_DELETE_LOBBY_XREF = `DELETE FROM "User_Lobby_Xref" WHERE "LobbyID" = ?;`;
 const SQL_DELETE_LOBBY = `DELETE FROM "Lobby" WHERE "LobbyID" = ?;`;
+const SQL_GET_ALL_XREF = `SELECT * FROM User_Lobby_Xref`;
 
 class Database {
    static {
@@ -50,6 +52,7 @@ class Database {
       this.db.run(SQL_CREATE_TABLE_LOBBY);
       this.db.run(SQL_CREATE_TABLE_USER);
       this.db.run(SQL_CREATE_TABLE_USER_LOBBY_XREF);
+
    }
 
    static async registerUser(username, password) {
@@ -133,15 +136,25 @@ class Database {
 
    static async deleteLobby(lobbyID) {
       return new Promise((resolve, reject) => {
-         this.db.run(SQL_DELETE_LOBBY, [lobbyID], (err) => {
-            if(err) {
-               reject(err);
-            } else{
-               resolve("success");
-            }
-         })
-      })
-   }
+          this.db.all(SQL_DELETE_LOBBY_XREF, [lobbyID], (err) => {
+              if (err) reject(err);
+              this.db.all(SQL_DELETE_LOBBY, [lobbyID], (err) => {
+                  if (err) reject(err);
+                  else resolve("success");
+              });
+          });
+      });
+  }
+
+  static async getAllXref() {
+   return new Promise((resolve, reject) => {
+       this.db.all(SQL_GET_ALL_XREF, [], (err, rows) => {
+           if (err) reject(err);
+           resolve(rows);
+       });
+   });
+}
+
 }
 
 module.exports = Database;
