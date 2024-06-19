@@ -19,7 +19,7 @@ const SQL_CREATE_TABLE_USER = `CREATE TABLE if not exists "User" (
 const SQL_CREATE_TABLE_USER_LOBBY_XREF = `CREATE TABLE if not exists "User_Lobby_Xref" (
 		"LobbyID"	INTEGER,
 	    "UserID"	INTEGER,
-		FOREIGN KEY("LobbyID") REFERENCES "Lobby"("LobbyID")
+		FOREIGN KEY("LobbyID") REFERENCES "Lobby"("LobbyID") ON DELETE CASCADE
 );`;
 
 const SQL_REGISTER_USER = `INSERT INTO User (Username,Password) VALUES (?,?)`;
@@ -30,6 +30,8 @@ const SQL_GET_USERS = `SELECT UserID,Username FROM User`;
 const SQL_JOIN_LOBBY = `INSERT INTO User_Lobby_Xref VALUES (?,?)`;
 const SQL_GET_LOBBIES_BY_USER_ID = `SELECT * FROM User_Lobby_Xref WHERE UserID = ?`;
 const SQL_GET_LOBBY_BY_LOBBY_ID = `SELECT * FROM Lobby WHERE LobbyID = ?`;
+const SQL_REMOVE_PLAYER_FROM_LOBBY =   `DELETE FROM "User_Lobby_Xref" WHERE "LobbyID" = ? AND "UserID" = ?;`
+const SQL_DELETE_LOBBY = `DELETE FROM "Lobby" WHERE "LobbyID" = ?;`;
 
 class Database {
    static {
@@ -106,6 +108,32 @@ class Database {
 	   this.db.run(SQL_CREATE_LOBBY, [lobbyName, hostID, lobbyType], (err) => {
 		   if(err) return console.log(err);
 	   });
+   }
+
+   static async removePlayerFromLobby(lobbyID, userID) {
+      return new Promise((resolve, reject) => {
+         this.db.run(SQL_REMOVE_PLAYER_FROM_LOBBY, [lobbyID, userID], (err) => {
+            if (err) {
+               reject(err)
+            }else {
+               resolve("success")
+            }
+            
+         })
+      })
+   }
+
+   static async deleteLobby(lobbyID) {
+      return new Promise((resolve, reject) => {
+         this.db.run(SQL_DELETE_LOBBY, [lobbyID], (err) => {
+            if (err) {
+               reject(err);
+            }
+            else{
+               resolve("success");
+            } 
+         })
+      })
    }
 }
 
