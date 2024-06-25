@@ -35,42 +35,41 @@ const SQL_REMOVE_PLAYER_FROM_LOBBY = `DELETE FROM "User_Lobby_Xref" WHERE "Lobby
 const SQL_DELETE_LOBBY_XREF = `DELETE FROM "User_Lobby_Xref" WHERE "LobbyID" = ?;`;
 const SQL_DELETE_LOBBY = `DELETE FROM "Lobby" WHERE "LobbyID" = ?;`;
 const SQL_GET_ALL_XREF = `SELECT * FROM User_Lobby_Xref`;
-
+const SQL_GET_USERS_IN_LOBBY = `SELECT DISTINCT * FROM User_Lobby_Xref WHERE "LobbyID" = ?;`
 class Database {
    static {
-	  if(!fs.existsSync("./data/database.db")) {
-           if(!fs.existsSync("./data/")) {
-               fs.mkdir("./data/", (err) => {
-                   if(err) return console.log(err);
-               });
-           }
-		   fs.writeFileSync("./data/database.db", "");
+      if (!fs.existsSync("./data/database.db")) {
+         if (!fs.existsSync("./data/")) {
+            fs.mkdir("./data/", (err) => {
+               if (err) return console.log(err);
+            });
+         }
+         fs.writeFileSync("./data/database.db", "");
       }
       this.db = new sqlite3.Database("./data/database.db", sqlite3.OPEN_READWRITE, (err) => {
-         if(err) return console.log(err);
+         if (err) return console.log(err);
       });
       this.db.run(SQL_CREATE_TABLE_LOBBY);
       this.db.run(SQL_CREATE_TABLE_USER);
       this.db.run(SQL_CREATE_TABLE_USER_LOBBY_XREF);
-
    }
 
    static async registerUser(username, password) {
-	   return new Promise((resolve, reject) => {
-		   const hashedPassword = bcrypt.hash(password, 10);
-		   this.db.run(SQL_REGISTER_USER, [username, hashedPassword], (err) => {
-		   		if(err)
-			   		reject(err);
-				else
-					resolve("success");
-		   });
-	   });
-    }
+      return new Promise((resolve, reject) => {
+         const hashedPassword = bcrypt.hash(password, 10);
+         this.db.run(SQL_REGISTER_USER, [username, hashedPassword], (err) => {
+            if (err)
+               reject(err);
+            else
+               resolve("success");
+         });
+      });
+   }
 
-   static async validateLogin(username,password) {
+   static async validateLogin(username, password) {
       return new Promise((resolve, reject) => {
          this.db.get(SQL_VALIDATE_LOGIN, [username], (err, rows) => {
-            const result = bcrypt.compare(password,rows.Password)
+            const result = bcrypt.compare(password, rows.Password)
             resolve(result);
          })
       })
@@ -99,33 +98,33 @@ class Database {
    static async getLobbiesByUserID(userID) {
       return new Promise((resolve, reject) => {
          this.db.all(SQL_GET_LOBBIES_BY_USER_ID, [userID], (err, rows) => {
-			 if(rows) {
-            	resolve(Promise.all(rows.map(x => this.getLobbyByLobbyID(x.LobbyID))));
-			 } else {
-				 resolve([]);
-			 }
+            if (rows) {
+               resolve(Promise.all(rows.map(x => this.getLobbyByLobbyID(x.LobbyID))));
+            } else {
+               resolve([]);
+            }
          })
       })
    }
 
    static async getLobbyByLobbyID(lobbyID) {
       return new Promise((resolve, reject) => {
-		 this.db.get("SELECT * FROM Lobby WHERE LobbyID = ?", [lobbyID], (err, rows) => {
-			 resolve(rows)
-   	  	 })
+         this.db.get("SELECT * FROM Lobby WHERE LobbyID = ?", [lobbyID], (err, rows) => {
+            resolve(rows)
+         })
       })
    }
 
    static createLobby(lobbyName, hostID, lobbyType = 0) {
-	   this.db.run(SQL_CREATE_LOBBY, [lobbyName, hostID, lobbyType], (err) => {
-		   if(err) return console.log(err);
-	   });
+      this.db.run(SQL_CREATE_LOBBY, [lobbyName, hostID, lobbyType], (err) => {
+         if (err) return console.log(err);
+      });
    }
 
    static async removePlayerFromLobby(lobbyID, userID) {
       return new Promise((resolve, reject) => {
          this.db.run(SQL_REMOVE_PLAYER_FROM_LOBBY, [lobbyID, userID], (err) => {
-            if(err) {
+            if (err) {
                reject(err);
             } else {
                resolve("success");
@@ -136,24 +135,33 @@ class Database {
 
    static async deleteLobby(lobbyID) {
       return new Promise((resolve, reject) => {
-          this.db.all(SQL_DELETE_LOBBY_XREF, [lobbyID], (err) => {
-              if (err) reject(err);
-              this.db.all(SQL_DELETE_LOBBY, [lobbyID], (err) => {
-                  if (err) reject(err);
-                  else resolve("success");
-              });
-          });
+         this.db.all(SQL_DELETE_LOBBY_XREF, [lobbyID], (err) => {
+            if (err) reject(err);
+            this.db.all(SQL_DELETE_LOBBY, [lobbyID], (err) => {
+               if (err) reject(err);
+               else resolve("success");
+            });
+         });
       });
-  }
+   }
 
-  static async getAllXref() {
-   return new Promise((resolve, reject) => {
-       this.db.all(SQL_GET_ALL_XREF, [], (err, rows) => {
-           if (err) reject(err);
-           resolve(rows);
-       });
-   });
-}
+   static async getAllXref() {
+      return new Promise((resolve, reject) => {
+         this.db.all(SQL_GET_ALL_XREF, [], (err, rows) => {
+            if (err) reject(err);
+            resolve(rows);
+         });
+      });
+   }
+   static async getUsersInLobby(lobbyID) {
+      return new Promise((resolve, reject) => {
+         this.db.all(SQL_GET_USERS_IN_LOBBY, [lobbyID], (err, rows) => {
+            if (err) reject(err);
+            resolve(rows);
+         });
+      });
+   }
+
 
 }
 
