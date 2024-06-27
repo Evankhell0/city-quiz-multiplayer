@@ -8,6 +8,11 @@ const stats = document.getElementById('stats');
 const log = document.getElementById('log');
 const userlist = document.getElementById('userlist');
 
+window.onload = function(e) {
+    const lobbyId = window.location.pathname.split("/").pop();
+    socket.emit("joinLobby", lobbyId);
+}
+
 form.addEventListener("submit", (e) => {
     e.preventDefault();
     if(input.value) {
@@ -35,7 +40,7 @@ socket.on("userlist", (users) => {
     userlist.innerHTML = "";
     users.forEach(u => {
         const item = document.createElement('li');
-        item.textContent = u;
+        item.textContent = `${u.username} ${u.online ? "(Online)" : ""}`;
         userlist.appendChild(item);
     })
 });

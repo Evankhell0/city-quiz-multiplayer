@@ -1,13 +1,14 @@
 const fs = require('fs');
+
 const Stats = require("./Stats.js");
 
 class GuessStorage {
-    constructor(cities) {
-        this.allCities = cities;
-        const guessData = fs.readFileSync('./src/citydata/guessData.json');
-        this.guessedCities = guessData ? JSON.parse(guessData) : [];
-        this.stats = new Stats(cities);
-        this.stats.update(this.guessedCities)
+    constructor(id, allCities) {
+        this.id = id;
+        this.allCities = allCities;
+        this.guessedCities = this.#loadGuessedCities();
+        this.stats = new Stats(this.allCities);
+        this.stats.update(this.guessedCities);
     }
 
     // process guesses coming from players, returns object{msg, city, guesser}
@@ -39,10 +40,24 @@ class GuessStorage {
         };
     }
 
+    #loadGuessedCities() {
+        let guessedCities = [];
+        if(!fs.existsSync("./src/citydata/lobbydata/")) {
+            fs.mkdir("./src/citydata/lobbydata/", (err) => {
+                if(err) return console.log(err);
+            });
+        }
+        if(fs.existsSync(`./src/citydata/lobbydata/${this.id}.json`)) {
+            const guessData = fs.readFileSync(`./src/citydata/lobbydata/${this.id}.json`);
+            guessedCities = guessData ? JSON.parse(guessData) : [];
+        }
+        return guessedCities;
+    }
+
     #addCity(city) {
         this.guessedCities.push(city);
         this.stats.update(this.guessedCities);
-        fs.writeFile("./src/citydata/guessData.json", JSON.stringify(this.guessedCities), (err) => {
+        fs.writeFile(`./src/citydata/lobbydata/${this.id}.json`, JSON.stringify(this.guessedCities), (err) => {
             if(err) return console.log(err);
         });
     }

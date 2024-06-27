@@ -1,4 +1,4 @@
-var myGeoJSONPath = 'geo2.json';
+var myGeoJSONPath = '/game/geo2.json';
 var myCustomStyle = {
     stroke: true,
     color: '#000', // Border color

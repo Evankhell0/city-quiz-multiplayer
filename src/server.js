@@ -5,71 +5,90 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 
-const Lobby = require("./Lobby.js");
-const lobby = new Lobby();
+const Data = require("./Data.js");
+const DB = require("./db.js");
 
-let userlist = [];
-const randomUserNames = [
-  "SunnyDaze",
-  "PixelPirate",
-  "RainbowNinja",
-  "StarGazer",
-  "MoonWalker",
-  "CrimsonScribe",
-  "LuckyLion",
-  "ElectricJolt",
-  "RubyRider",
-  "SilverFox",
-  "AquaWhisper",
-  "GoldenSnitch",
-  "MysticWanderer",
-  "ShadowPulse",
-  "CeruleanDream",
-  "VelvetVoyager",
-  "NeonNomad",
-  "CopperCrafter",
-  "JadeJester",
-  "AmberAlchemy",
-  "EmeraldEnigma",
-  "ObsidianOracle",
-  "PlatinumPioneer",
-  "TopazTinkerer",
-  "OnyxOpus",
-  "CrystalCaster",
-  "MarbleMaestro",
-  "QuasarQuest",
-  "GalacticGlider"
-];
-
-app.use(express.static("src/public"));
+app.use(express.static(__dirname + "/public"));
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/index.html');
+    res.redirect('/lobbies');
+});
+
+app.get('/lobby/:id([0-9]+)', (req, res) => {
+    res.sendFile(__dirname + '/public/game/index.html');
+});
+
+app.get('/lobbies', (req, res) => {
+    res.sendFile(__dirname + '/public/personal/index.html');
+});
+
+app.get('/login', (req, res) => {
+    res.sendFile(__dirname + '/public/login/index.html');
+});
+
+app.get('/register', (req, res) => {
+    res.sendFile(__dirname + '/public/register/index.html');
 });
 
 io.on('connection', (socket) => {
     console.log('a user connected');
 
-    socket.username = randomUserNames.pop() ?? "Unnamed";
-    userlist.push(socket.username);
-
-    io.emit("guessedCities", lobby.getGuessedCities());
-    io.emit("userlist", userlist);
-    io.emit("stats", lobby.getStats());
-
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
-        userlist = userlist.filter(u => u != socket.username);
-        io.emit("userlist", userlist);
+    socket.on('login', (data) => {
+        DB.validateLogin(data.username, data.password).then(res => {
+            if(res) {
+                socket.emit("loginSuccess");
+            } else {
+                socket.emit("loginFailed", "Invalid Username or Password");
+            }
+        })
     });
 
-    socket.on("guess", (guess) => {
-        const guessResult = lobby.makeGuess(guess, socket);
-        if(guessResult.msg == "correct") {
-            console.log(guessResult.city);
+    socket.on('register', (data) => {
+        DB.registerUser(data.username, data.password).then((res) => {
+            socket.emit("registerSuccess");
+        }).catch((err) => {
+            socket.emit("registerFailed", "Username already exists... probably");
+        });
+    });
+
+    // replace this with login logic
+        socket.user = Data.users[0];
+        socket.user.online = true;
+
+    socket.on('joinLobby', (id) => {
+        const lobby = Data.getLobby(id);
+
+        // validate if user has access to lobby here
+        if(!lobby.hasAccess(socket.user.id)) {
+            // emit that no access
+            console.log("no access");
+            //return;
         }
-        io.emit("guessResult", guessResult);
-        io.emit("stats", lobby.getStats());
+
+        console.log(socket.user.username + ' joined lobby ' + id);
+
+        socket.emit("guessedCities", lobby.getGuessedCities());
+        socket.emit("userlist", lobby.getUsers());
+        socket.emit("stats", lobby.getStats());
+
+        socket.on('disconnect', () => {
+            console.log('user disconnected');
+            socket.user.online = false;
+            io.emit("userlist", lobby.getUsers());
+        });
+
+        socket.on("guess", (guess) => {
+            const guessResult = lobby.makeGuess(guess, socket);
+            if(guessResult.msg == "correct") {
+                console.log(guessResult.city);
+            }
+            io.emit("guessResult", guessResult);
+            io.emit("stats", lobby.getStats());
+        });
+    });
+
+    socket.on('personalPage', () => {
+        socket.emit("playerData", socket.user);
     });
 });
 

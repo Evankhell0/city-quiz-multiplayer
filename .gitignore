@@ -1,1 +1,4 @@
 **/node_modules
+**/citydata/lobbydata/*
+**/data
+*.db
