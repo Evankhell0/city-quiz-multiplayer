@@ -55,17 +55,21 @@ class Database {
    }
 
    static async registerUser(username, password) {
-      return new Promise((resolve, reject) => {
-         const hashedPassword = bcrypt.hash(password, 10);
-         this.db.run(SQL_REGISTER_USER, [username, hashedPassword], (err) => {
-            if (err)
-               reject(err);
-            else
-               resolve("success");
-         });
-      });
-   }
-
+      	    try {
+      	        const hashedPassword = await bcrypt.hash(password, 10);
+      	        return new Promise((resolve, reject) => {
+      	            this.db.run(SQL_REGISTER_USER, [username, hashedPassword], (err) => {
+                      if (err) {
+      	                    reject(err);
+      	                } else {
+      	                    resolve("success");
+      	                }
+      	            });
+      	        });
+      	    } catch (error) {
+      	        throw error;
+      	    }
+      	}
    static async validateLogin(username, password) {
       return new Promise((resolve, reject) => {
          this.db.get(SQL_VALIDATE_LOGIN, [username], (err, rows) => {
