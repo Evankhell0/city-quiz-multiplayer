@@ -21,14 +21,20 @@ $.getJSON(myGeoJSONPath,function(data){
     geojsonLayer.addData(data);
 })
 
-function addCircle(lat, lon, population, capital) {
-    var circle = L.circleMarker([lat, lon], {
-        color: capital ? '#b5021a' : 'red',
-        fillColor: capital ? '#b5021a' : '#f03',
+function addCircle(city) {
+    var circle = L.circleMarker([city.coordinates.lat, city.coordinates.lon], {
+        color: city.capital ? '#b5021a' : 'red',
+        fillColor: city.capital ? '#b5021a' : '#f03',
         fillOpacity: 0.5,
         radius: 6,
-        pane: capital ? 'capitals' : 'circles'
-    }).addTo(map)
+        pane: city.capital ? 'capitals' : 'circles'
+    }).addTo(map);
+
+    var toolTipText = `${city.name}, ${city.cou_name_en} (${city.population?.toLocaleString("en-US")})`
+    if(city.capital == true) {
+        toolTipText += " ★";
+    }
+    circle.bindTooltip(toolTipText);
 }
 
 function getRadius(population) {

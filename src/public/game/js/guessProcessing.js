@@ -34,7 +34,7 @@ function createCityElement(city) {
         item.textContent += " ★";
     }
     cities.insertBefore(item, cities.childNodes[0]);
-    addCircle(city.coordinates.lat, city.coordinates.lon, city.population, city.capital);
+    addCircle(city);
 }
 
 function createStatElement(stat) {
