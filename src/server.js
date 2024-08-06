@@ -38,8 +38,10 @@ io.on('connection', (socket) => {
             if(res) {
                 socket.emit("loginSuccess");
             } else {
-                socket.emit("loginFailed", "Invalid Username or Password");
+                socket.emit("loginFailed", "Invalid Password");
             }
+        }).catch((err) => {
+            socket.emit("loginFailed", err.message);
         })
     });
 
