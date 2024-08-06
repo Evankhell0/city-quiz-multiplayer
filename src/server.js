@@ -47,7 +47,7 @@ io.on('connection', (socket) => {
         DB.registerUser(data.username, data.password).then((res) => {
             socket.emit("registerSuccess");
         }).catch((err) => {
-            socket.emit("registerFailed", "Username already exists... probably");
+            socket.emit("registerFailed", "That Username is already taken");
         });
     });
 
