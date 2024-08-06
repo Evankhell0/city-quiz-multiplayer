@@ -73,8 +73,14 @@ class Database {
    static async validateLogin(username, password) {
       return new Promise((resolve, reject) => {
          this.db.get(SQL_VALIDATE_LOGIN, [username], (err, rows) => {
-            const result = bcrypt.compare(password, rows.Password)
-            resolve(result);
+			 if(err) {
+				 reject({ message: "Unknown Error" });
+			 } else if(!rows) {
+				 reject({ message: "Username not found" });
+			 } else {
+				 const result = bcrypt.compare(password, rows.Password);
+				 resolve(result);
+			 }
          })
       })
    }
